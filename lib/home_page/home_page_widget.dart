@@ -206,7 +206,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   if (homePageTasksRecordList.length != 0)
                     Builder(
                       builder: (context) {
-                        final taskList = homePageTasksRecordList.toList();
+                        final taskList = homePageTasksRecordList
+                            .where((e) => dropDownValue == 'Completed'
+                                ? (e != null)
+                                : e.checked!)
+                            .toList();
                         return ListView.builder(
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,

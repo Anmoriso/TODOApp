@@ -103,6 +103,25 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               ],
             ),
           ),
+          endDrawer: Drawer(
+            elevation: 16,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Align(
+                  alignment: AlignmentDirectional(-0.85, 0.05),
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                    child: Text(
+                      'Clear Completed',
+                      textAlign: TextAlign.start,
+                      style: FlutterFlowTheme.of(context).bodyText1,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           appBar: AppBar(
             backgroundColor: Color(0xFFD3D3D3),
             automaticallyImplyLeading: false,
@@ -114,7 +133,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               icon: Icon(
                 Icons.menu,
                 color: FlutterFlowTheme.of(context).primaryText,
-                size: 30,
+                size: 40,
               ),
               onPressed: () async {
                 scaffoldKey.currentState!.openDrawer();
@@ -128,39 +147,27 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               Align(
                 alignment: AlignmentDirectional(0, 0),
                 child: FlutterFlowDropDown<String>(
+                  initialOption: dropDownValue ??= 'Completed',
                   options: ['All', 'Active', 'Completed'],
-                  onChanged: (val) async {
-                    setState(() => dropDownValue = val);
-                    if (dropDownValue == 'All') {
-                      setState(() => FFAppState().checkedFilter.add(false));
-                      setState(() => FFAppState().checkedFilter.add(true));
-                    } else {
-                      if (dropDownValue == 'Completed') {
-                        setState(() => FFAppState().checkedFilter = []);
-                        setState(() => FFAppState().checkedFilter.add(true));
-                      } else {
-                        setState(() => FFAppState().checkedFilter = []);
-                        setState(() => FFAppState().checkedFilter.add(false));
-                      }
-                    }
-                  },
-                  width: 70,
+                  onChanged: (val) => setState(() => dropDownValue = val),
+                  width: 150,
                   height: 60,
                   textStyle: FlutterFlowTheme.of(context).bodyText1.override(
                         fontFamily: 'Poppins',
                         color: Colors.black,
+                        fontSize: 14,
                       ),
                   icon: Icon(
                     Icons.filter_list_rounded,
                     color: FlutterFlowTheme.of(context).primaryText,
-                    size: 15,
+                    size: 40,
                   ),
                   fillColor: Color(0xFFD3D3D3),
                   elevation: 2,
                   borderColor: Colors.transparent,
                   borderWidth: 0,
                   borderRadius: 0,
-                  margin: EdgeInsetsDirectional.fromSTEB(12, 4, 23, 4),
+                  margin: EdgeInsetsDirectional.fromSTEB(12, 6, 12, 6),
                   hidesUnderline: true,
                 ),
               ),
@@ -170,9 +177,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 borderWidth: 1,
                 buttonSize: 60,
                 icon: Icon(
-                  Icons.thermostat_sharp,
+                  Icons.more_vert,
                   color: FlutterFlowTheme.of(context).primaryText,
-                  size: 30,
+                  size: 40,
                 ),
                 onPressed: () {
                   print('IconButton pressed ...');
@@ -189,7 +196,19 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (homePageTasksRecordList.length != 0)
+                  if (homePageTasksRecordList
+                          .where((e) => () {
+                                if (dropDownValue == 'All') {
+                                  return (e != null);
+                                } else if (dropDownValue == 'Active') {
+                                  return !e.checked!;
+                                } else {
+                                  return e.checked!;
+                                }
+                              }())
+                          .toList()
+                          .length !=
+                      0)
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -203,91 +222,108 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         ),
                       ],
                     ),
-                  if (homePageTasksRecordList.length != 0)
-                    Builder(
-                      builder: (context) {
-                        final taskList = homePageTasksRecordList
-                            .where((e) => dropDownValue == 'Completed'
-                                ? (e != null)
-                                : e.checked!)
-                            .toList();
-                        return ListView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: taskList.length,
-                          itemBuilder: (context, taskListIndex) {
-                            final taskListItem = taskList[taskListIndex];
-                            return Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(32, 8, 32, 32),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Theme(
-                                    data: ThemeData(
-                                      checkboxTheme: CheckboxThemeData(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(0),
-                                        ),
+                  Builder(
+                    builder: (context) {
+                      final taskList = homePageTasksRecordList
+                          .where((e) => () {
+                                if (dropDownValue == 'All') {
+                                  return (e != null);
+                                } else if (dropDownValue == 'Active') {
+                                  return !e.checked!;
+                                } else {
+                                  return e.checked!;
+                                }
+                              }())
+                          .toList();
+                      return ListView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: taskList.length,
+                        itemBuilder: (context, taskListIndex) {
+                          final taskListItem = taskList[taskListIndex];
+                          return Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(32, 8, 32, 32),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Theme(
+                                  data: ThemeData(
+                                    checkboxTheme: CheckboxThemeData(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(0),
                                       ),
-                                      unselectedWidgetColor: Color(0xFFF5F5F5),
                                     ),
-                                    child: Checkbox(
-                                      value: checkboxValueMap[taskListItem] ??=
-                                          taskListItem.checked!,
-                                      onChanged: (newValue) async {
-                                        setState(() =>
-                                            checkboxValueMap[taskListItem] =
-                                                newValue!);
-                                        if (newValue!) {
-                                          final tasksUpdateData =
-                                              createTasksRecordData(
-                                            checked: true,
-                                          );
-                                          await taskListItem.reference
-                                              .update(tasksUpdateData);
-                                        } else {
-                                          final tasksUpdateData =
-                                              createTasksRecordData(
-                                            checked: false,
-                                          );
-                                          await taskListItem.reference
-                                              .update(tasksUpdateData);
-                                        }
-                                      },
-                                      activeColor: Color(0xFF008200),
-                                    ),
+                                    unselectedWidgetColor: Color(0xFFD3D3D3),
                                   ),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        context.pushNamed(
-                                          'TaskDetails',
-                                          queryParams: {
-                                            'taskRef': serializeParam(
-                                              taskListItem.reference,
-                                              ParamType.DocumentReference,
-                                            ),
-                                          }.withoutNulls,
+                                  child: Checkbox(
+                                    value: checkboxValueMap[taskListItem] ??=
+                                        taskListItem.checked!,
+                                    onChanged: (newValue) async {
+                                      setState(() =>
+                                          checkboxValueMap[taskListItem] =
+                                              newValue!);
+                                      if (newValue!) {
+                                        final tasksUpdateData =
+                                            createTasksRecordData(
+                                          checked: true,
                                         );
-                                      },
-                                      child: Text(
-                                        taskListItem.title!,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText1,
-                                      ),
+                                        await taskListItem.reference
+                                            .update(tasksUpdateData);
+                                      } else {
+                                        final tasksUpdateData =
+                                            createTasksRecordData(
+                                          checked: false,
+                                        );
+                                        await taskListItem.reference
+                                            .update(tasksUpdateData);
+                                      }
+                                    },
+                                    activeColor: Color(0xFF008200),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () async {
+                                      context.pushNamed(
+                                        'TaskDetails',
+                                        queryParams: {
+                                          'taskRef': serializeParam(
+                                            taskListItem.reference,
+                                            ParamType.DocumentReference,
+                                          ),
+                                        }.withoutNulls,
+                                      );
+                                    },
+                                    child: Text(
+                                      taskListItem.title!,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1,
                                     ),
                                   ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  if (homePageTasksRecordList.length == 0)
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  Spacer(),
+                  if (homePageTasksRecordList
+                          .where((e) => () {
+                                if (dropDownValue == 'All') {
+                                  return (e != null);
+                                } else if (dropDownValue == 'Active') {
+                                  return !e.checked!;
+                                } else {
+                                  return e.checked!;
+                                }
+                              }())
+                          .toList()
+                          .length ==
+                      0)
                     Expanded(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,

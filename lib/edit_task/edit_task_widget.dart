@@ -24,6 +24,13 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
   void dispose() {
     taskdetailsController?.dispose();
     titleController?.dispose();

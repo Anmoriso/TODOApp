@@ -23,6 +23,13 @@ class _TaskDetailsWidgetState extends State<TaskDetailsWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<TasksRecord>(
       stream: TasksRecord.getDocument(widget.taskRef!),

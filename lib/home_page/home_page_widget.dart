@@ -24,6 +24,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   String? dropDownValue;
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<TasksRecord>>(
       stream: queryTasksRecord(),
@@ -50,7 +57,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Image.asset(
-                  'assets/images/Screenshot_2022-12-05_at_17.25.43.png',
+                  'assets/images/logo_no_fill.png',
                   width: 100,
                   height: 100,
                   fit: BoxFit.contain,
@@ -331,7 +338,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Image.asset(
-                            'assets/images/Screenshot_2022-12-05_at_17.25.43.png',
+                            'assets/images/logo_no_fill.png',
                             width: 80,
                             height: 80,
                             fit: BoxFit.cover,

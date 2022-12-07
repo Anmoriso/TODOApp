@@ -19,14 +19,14 @@ class EditTaskWidget extends StatefulWidget {
 }
 
 class _EditTaskWidgetState extends State<EditTaskWidget> {
-  TextEditingController? textController1;
-  TextEditingController? textController2;
+  TextEditingController? taskdetailsController;
+  TextEditingController? titleController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void dispose() {
-    textController1?.dispose();
-    textController2?.dispose();
+    taskdetailsController?.dispose();
+    titleController?.dispose();
     super.dispose();
   }
 
@@ -86,7 +86,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   16, 16, 16, 16),
                               child: TextFormField(
-                                controller: textController1 ??=
+                                controller: titleController ??=
                                     TextEditingController(
                                   text: editTaskTasksRecord.title,
                                 ),
@@ -144,7 +144,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   16, 16, 16, 16),
                               child: TextFormField(
-                                controller: textController2 ??=
+                                controller: taskdetailsController ??=
                                     TextEditingController(
                                   text: editTaskTasksRecord.details,
                                 ),
@@ -225,8 +225,8 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                             ),
                             onPressed: () async {
                               final tasksUpdateData = createTasksRecordData(
-                                title: textController1?.text ?? '',
-                                details: textController2?.text ?? '',
+                                title: titleController?.text ?? '',
+                                details: taskdetailsController?.text ?? '',
                               );
                               await editTaskTasksRecord.reference
                                   .update(tasksUpdateData);

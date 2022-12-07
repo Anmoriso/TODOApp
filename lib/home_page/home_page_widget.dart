@@ -1,4 +1,5 @@
 import '../backend/backend.dart';
+import '../flutter_flow/flutter_flow_drop_down.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -20,6 +21,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       checkboxValueMap.entries.where((e) => e.value).map((e) => e.key).toList();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  String? dropDownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -123,19 +125,44 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               style: FlutterFlowTheme.of(context).title1,
             ),
             actions: [
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: Icon(
-                  Icons.filter_list_rounded,
-                  color: FlutterFlowTheme.of(context).primaryText,
-                  size: 30,
+              Align(
+                alignment: AlignmentDirectional(0, 0),
+                child: FlutterFlowDropDown<String>(
+                  options: ['All', 'Active', 'Completed'],
+                  onChanged: (val) async {
+                    setState(() => dropDownValue = val);
+                    if (dropDownValue == 'All') {
+                      setState(() => FFAppState().checkedFilter.add(false));
+                      setState(() => FFAppState().checkedFilter.add(true));
+                    } else {
+                      if (dropDownValue == 'Completed') {
+                        setState(() => FFAppState().checkedFilter = []);
+                        setState(() => FFAppState().checkedFilter.add(true));
+                      } else {
+                        setState(() => FFAppState().checkedFilter = []);
+                        setState(() => FFAppState().checkedFilter.add(false));
+                      }
+                    }
+                  },
+                  width: 70,
+                  height: 60,
+                  textStyle: FlutterFlowTheme.of(context).bodyText1.override(
+                        fontFamily: 'Poppins',
+                        color: Colors.black,
+                      ),
+                  icon: Icon(
+                    Icons.filter_list_rounded,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 15,
+                  ),
+                  fillColor: Color(0xFFD3D3D3),
+                  elevation: 2,
+                  borderColor: Colors.transparent,
+                  borderWidth: 0,
+                  borderRadius: 0,
+                  margin: EdgeInsetsDirectional.fromSTEB(12, 4, 23, 4),
+                  hidesUnderline: true,
                 ),
-                onPressed: () {
-                  print('IconButton pressed ...');
-                },
               ),
               FlutterFlowIconButton(
                 borderColor: Colors.transparent,
@@ -160,7 +187,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               onTap: () => FocusScope.of(context).unfocus(),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (homePageTasksRecordList.length != 0)
                     Row(
@@ -177,32 +204,16 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       ],
                     ),
                   if (homePageTasksRecordList.length != 0)
-                    StreamBuilder<List<TasksRecord>>(
-                      stream: queryTasksRecord(),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: CircularProgressIndicator(
-                                color:
-                                    FlutterFlowTheme.of(context).primaryColor,
-                              ),
-                            ),
-                          );
-                        }
-                        List<TasksRecord> listViewTasksRecordList =
-                            snapshot.data!;
+                    Builder(
+                      builder: (context) {
+                        final taskList = homePageTasksRecordList.toList();
                         return ListView.builder(
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
-                          itemCount: listViewTasksRecordList.length,
-                          itemBuilder: (context, listViewIndex) {
-                            final listViewTasksRecord =
-                                listViewTasksRecordList[listViewIndex];
+                          itemCount: taskList.length,
+                          itemBuilder: (context, taskListIndex) {
+                            final taskListItem = taskList[taskListIndex];
                             return Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(32, 8, 32, 32),
@@ -220,25 +231,25 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                       unselectedWidgetColor: Color(0xFFF5F5F5),
                                     ),
                                     child: Checkbox(
-                                      value: checkboxValueMap[
-                                              listViewTasksRecord] ??=
-                                          listViewTasksRecord.checked!,
+                                      value: checkboxValueMap[taskListItem] ??=
+                                          taskListItem.checked!,
                                       onChanged: (newValue) async {
-                                        setState(() => checkboxValueMap[
-                                            listViewTasksRecord] = newValue!);
+                                        setState(() =>
+                                            checkboxValueMap[taskListItem] =
+                                                newValue!);
                                         if (newValue!) {
                                           final tasksUpdateData =
                                               createTasksRecordData(
                                             checked: true,
                                           );
-                                          await listViewTasksRecord.reference
+                                          await taskListItem.reference
                                               .update(tasksUpdateData);
                                         } else {
                                           final tasksUpdateData =
                                               createTasksRecordData(
                                             checked: false,
                                           );
-                                          await listViewTasksRecord.reference
+                                          await taskListItem.reference
                                               .update(tasksUpdateData);
                                         }
                                       },
@@ -252,14 +263,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                           'TaskDetails',
                                           queryParams: {
                                             'taskRef': serializeParam(
-                                              listViewTasksRecord.reference,
+                                              taskListItem.reference,
                                               ParamType.DocumentReference,
                                             ),
                                           }.withoutNulls,
                                         );
                                       },
                                       child: Text(
-                                        listViewTasksRecord.title!,
+                                        taskListItem.title!,
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1,
                                       ),
@@ -272,30 +283,26 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         );
                       },
                     ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      if (homePageTasksRecordList.length == 0)
-                        Expanded(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/Screenshot_2022-12-05_at_17.25.43.png',
-                                width: 80,
-                                height: 80,
-                                fit: BoxFit.cover,
-                              ),
-                              Text(
-                                'No Tasks available',
-                                style: FlutterFlowTheme.of(context).bodyText1,
-                              ),
-                            ],
+                  if (homePageTasksRecordList.length == 0)
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/images/Screenshot_2022-12-05_at_17.25.43.png',
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
                           ),
-                        ),
-                    ],
-                  ),
+                          Text(
+                            'No Tasks available',
+                            style: FlutterFlowTheme.of(context).bodyText1,
+                          ),
+                        ],
+                      ),
+                    ),
                   Expanded(
                     child: Row(
                       mainAxisSize: MainAxisSize.max,

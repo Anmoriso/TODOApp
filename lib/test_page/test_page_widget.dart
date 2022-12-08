@@ -2,6 +2,7 @@ import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -48,6 +49,18 @@ class _TestPageWidgetState extends State<TestPageWidget> {
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              context.pushNamed('AddTask');
+            },
+            backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+            elevation: 8,
+            child: Icon(
+              Icons.add,
+              color: FlutterFlowTheme.of(context).primaryBtnText,
+              size: 30,
+            ),
+          ),
           appBar: AppBar(
             backgroundColor: Color(0xFFD3D3D3),
             automaticallyImplyLeading: false,
@@ -113,6 +126,18 @@ class _TestPageWidgetState extends State<TestPageWidget> {
               onTap: () => FocusScope.of(context).unfocus(),
               child: Stack(
                 children: [
+                  if (FFAppState().showMenu || FFAppState().showFilter)
+                    InkWell(
+                      onTap: () async {
+                        setState(() => FFAppState().showMenu = false);
+                        setState(() => FFAppState().showFilter = false);
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        decoration: BoxDecoration(),
+                      ),
+                    ),
                   Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -439,6 +464,111 @@ class _TestPageWidgetState extends State<TestPageWidget> {
                         Spacer(),
                     ],
                   ),
+                  if (FFAppState().showFilter)
+                    Align(
+                      alignment: AlignmentDirectional(0.74, -1),
+                      child: Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  setState(
+                                      () => FFAppState().FilterOption = 'All');
+                                  setState(
+                                      () => FFAppState().showFilter = false);
+                                },
+                                text: 'All',
+                                options: FFButtonOptions(
+                                  width: double.infinity,
+                                  height: 45,
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .subtitle2
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  setState(() =>
+                                      FFAppState().FilterOption = 'Active');
+                                  setState(
+                                      () => FFAppState().showFilter = false);
+                                },
+                                text: 'Active',
+                                options: FFButtonOptions(
+                                  width: 130,
+                                  height: 40,
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .subtitle2
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  setState(() =>
+                                      FFAppState().FilterOption = 'Completed');
+                                  setState(
+                                      () => FFAppState().showFilter = false);
+                                },
+                                text: 'Completed',
+                                options: FFButtonOptions(
+                                  width: 130,
+                                  height: 40,
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .subtitle2
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),

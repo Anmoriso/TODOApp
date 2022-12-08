@@ -165,10 +165,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               icon: Icon(
                 Icons.menu,
                 color: FlutterFlowTheme.of(context).primaryText,
-                size: 40,
+                size: 30,
               ),
               onPressed: () async {
                 scaffoldKey.currentState!.openDrawer();
+                setState(() => FFAppState().showMenu = false);
+                setState(() => FFAppState().showFilter = false);
               },
             ),
             title: Text(
@@ -184,7 +186,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 icon: Icon(
                   Icons.filter_list_outlined,
                   color: FlutterFlowTheme.of(context).primaryText,
-                  size: 40,
+                  size: 30,
                 ),
                 onPressed: () async {
                   setState(
@@ -200,7 +202,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 icon: Icon(
                   Icons.more_vert,
                   color: FlutterFlowTheme.of(context).primaryText,
-                  size: 40,
+                  size: 30,
                 ),
                 onPressed: () async {
                   setState(
@@ -231,7 +233,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     ),
                   Column(
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       if (homePageTasksRecordList
                               .where((e) => () {
@@ -396,7 +398,23 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           );
                         },
                       ),
-                      Spacer(),
+                      if ((homePageTasksRecordList
+                                  .where((e) => () {
+                                        if (FFAppState().FilterOption ==
+                                            'All') {
+                                          return (e != null);
+                                        } else if (FFAppState().FilterOption ==
+                                            'Active') {
+                                          return !e.checked!;
+                                        } else {
+                                          return e.checked!;
+                                        }
+                                      }())
+                                  .toList()
+                                  .length ==
+                              0) &&
+                          (FFAppState().FilterOption == 'Completed'))
+                        Spacer(),
                       if ((homePageTasksRecordList
                                   .where((e) => () {
                                         if (FFAppState().FilterOption ==
@@ -419,11 +437,29 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Icon(
-                                Icons.shield,
-                                color:
-                                    FlutterFlowTheme.of(context).primaryColor,
-                                size: 60,
+                              Stack(
+                                alignment: AlignmentDirectional(
+                                    0, -0.19999999999999996),
+                                children: [
+                                  Align(
+                                    alignment: AlignmentDirectional(0, 0),
+                                    child: Icon(
+                                      Icons.shield,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryColor,
+                                      size: 60,
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: AlignmentDirectional(0, 0.2),
+                                    child: Icon(
+                                      Icons.check_outlined,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryBtnText,
+                                      size: 45,
+                                    ),
+                                  ),
+                                ],
                               ),
                               Text(
                                 'You have no  completed tasks!',
@@ -502,7 +538,23 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             ],
                           ),
                         ),
-                      Spacer(),
+                      if ((homePageTasksRecordList
+                                  .where((e) => () {
+                                        if (FFAppState().FilterOption ==
+                                            'All') {
+                                          return (e != null);
+                                        } else if (FFAppState().FilterOption ==
+                                            'Active') {
+                                          return !e.checked!;
+                                        } else {
+                                          return e.checked!;
+                                        }
+                                      }())
+                                  .toList()
+                                  .length ==
+                              0) &&
+                          (FFAppState().FilterOption == 'Completed'))
+                        Spacer(),
                     ],
                   ),
                   if (FFAppState().showMenu)

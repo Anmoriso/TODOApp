@@ -137,9 +137,9 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
             ),
           ),
           appBar: AppBar(
-            backgroundColor: Color(0xFFD3D3D3),
-            iconTheme:
-                IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
+            backgroundColor: FlutterFlowTheme.of(context).alternate,
+            iconTheme: IconThemeData(
+                color: FlutterFlowTheme.of(context).tertiaryColor),
             automaticallyImplyLeading: true,
             leading: FlutterFlowIconButton(
               borderColor: Colors.transparent,

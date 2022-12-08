@@ -488,7 +488,7 @@ class _TestPageWidgetState extends State<TestPageWidget> {
                                 text: 'All',
                                 options: FFButtonOptions(
                                   width: double.infinity,
-                                  height: 45,
+                                  height: 40,
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
                                   textStyle: FlutterFlowTheme.of(context)

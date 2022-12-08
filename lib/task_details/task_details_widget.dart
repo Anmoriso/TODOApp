@@ -205,7 +205,8 @@ class _TaskDetailsWidgetState extends State<TaskDetailsWidget> {
                             fillColor: Color(0xFF008200),
                             icon: Icon(
                               Icons.mode_edit,
-                              color: Color(0xFFD3D3D3),
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
                               size: 30,
                             ),
                             onPressed: () async {

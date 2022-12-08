@@ -3,6 +3,7 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import '../custom_code/actions/index.dart' as actions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -537,8 +538,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             FFButtonWidget(
-                              onPressed: () {
-                                print('ClearCompleted pressed ...');
+                              onPressed: () async {
+                                await actions.clearCompletedTasks(
+                                  homePageTasksRecordList
+                                      .where((e) => e.checked!)
+                                      .toList()
+                                      .map((e) => e.reference)
+                                      .toList(),
+                                );
                               },
                               text: 'Clear completed',
                               options: FFButtonOptions(
@@ -610,6 +617,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 onPressed: () async {
                                   setState(
                                       () => FFAppState().FilterOption = 'All');
+                                  setState(
+                                      () => FFAppState().showFilter = false);
                                 },
                                 text: 'All',
                                 options: FFButtonOptions(
@@ -638,6 +647,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 onPressed: () async {
                                   setState(() =>
                                       FFAppState().FilterOption = 'Active');
+                                  setState(
+                                      () => FFAppState().showFilter = false);
                                 },
                                 text: 'Active',
                                 options: FFButtonOptions(
@@ -665,6 +676,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 onPressed: () async {
                                   setState(() =>
                                       FFAppState().FilterOption = 'Completed');
+                                  setState(
+                                      () => FFAppState().showFilter = false);
                                 },
                                 text: 'Completed',
                                 options: FFButtonOptions(

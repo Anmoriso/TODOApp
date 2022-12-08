@@ -149,10 +149,6 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                                 return 'Task cannot be empty';
                               }
 
-                              if (val.length < 1) {
-                                return 'Task cannot be empty';
-                              }
-
                               return null;
                             },
                           ),
@@ -214,10 +210,6 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                             style: FlutterFlowTheme.of(context).bodyText1,
                             validator: (val) {
                               if (val == null || val.isEmpty) {
-                                return 'Task cannot be empty';
-                              }
-
-                              if (val.length < 1) {
                                 return 'Task cannot be empty';
                               }
 

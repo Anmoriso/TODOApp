@@ -297,6 +297,26 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                               );
                                               await taskListItem.reference
                                                   .update(tasksUpdateData);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    'Task marked complete',
+                                                    style: TextStyle(
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
+                                                          .primaryBackground,
+                                                      height: 10,
+                                                    ),
+                                                  ),
+                                                  duration: Duration(
+                                                      milliseconds: 2000),
+                                                  backgroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .secondaryText,
+                                                ),
+                                              );
                                             } else {
                                               final tasksUpdateData =
                                                   createTasksRecordData(
@@ -304,6 +324,26 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                               );
                                               await taskListItem.reference
                                                   .update(tasksUpdateData);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    'Task marked active',
+                                                    style: TextStyle(
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
+                                                          .primaryBackground,
+                                                      height: 10,
+                                                    ),
+                                                  ),
+                                                  duration: Duration(
+                                                      milliseconds: 2000),
+                                                  backgroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .secondaryText,
+                                                ),
+                                              );
                                             }
                                           },
                                           activeColor: Color(0xFF008200),
@@ -353,7 +393,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                     .toList()
                                     .length ==
                                 0) &&
-                            (FFAppState().FilterOption == 'Active'))
+                            (FFAppState().FilterOption == 'Completed'))
                           Expanded(
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
@@ -462,7 +502,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   fillColor: Color(0xFF008200),
                                   icon: Icon(
                                     Icons.add,
-                                    color: Color(0xFFD3D3D3),
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryBackground,
                                     size: 30,
                                   ),
                                   onPressed: () async {
@@ -511,7 +552,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                     .subtitle2
                                     .override(
                                       fontFamily: 'Outfit',
-                                      color: Color(0xFF14181B),
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -535,7 +577,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                     .subtitle2
                                     .override(
                                       fontFamily: 'Outfit',
-                                      color: Color(0xFF14181B),
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
                                     ),

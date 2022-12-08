@@ -1,12 +1,9 @@
 import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_drop_down.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TestPageWidget extends StatefulWidget {
@@ -21,7 +18,6 @@ class _TestPageWidgetState extends State<TestPageWidget> {
   List<TasksRecord> get checkboxCheckedItems =>
       checkboxValueMap.entries.where((e) => e.value).map((e) => e.key).toList();
 
-  String? dropDownValue;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -52,70 +48,6 @@ class _TestPageWidgetState extends State<TestPageWidget> {
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          drawer: Drawer(
-            elevation: 16,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Image.asset(
-                  'assets/images/logo_no_fill.png',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.contain,
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                  child: InkWell(
-                    onTap: () async {
-                      context.pushNamed('HomePage');
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.tasks,
-                          color: Colors.black,
-                          size: 24,
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                          child: Text(
-                            'Task List',
-                            style: FlutterFlowTheme.of(context).bodyText1,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                  child: InkWell(
-                    onTap: () async {
-                      context.pushNamed('Statistics');
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Icon(
-                          Icons.bar_chart,
-                          color: Colors.black,
-                          size: 24,
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                          child: Text(
-                            'Statistics',
-                            style: FlutterFlowTheme.of(context).bodyText1,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
           appBar: AppBar(
             backgroundColor: Color(0xFFD3D3D3),
             automaticallyImplyLeading: false,
@@ -127,43 +59,34 @@ class _TestPageWidgetState extends State<TestPageWidget> {
               icon: Icon(
                 Icons.menu,
                 color: FlutterFlowTheme.of(context).primaryText,
-                size: 40,
+                size: 30,
               ),
               onPressed: () async {
                 scaffoldKey.currentState!.openDrawer();
+                setState(() => FFAppState().showMenu = false);
+                setState(() => FFAppState().showFilter = false);
               },
             ),
             title: Text(
-              'Test Page',
+              'Todo',
               style: FlutterFlowTheme.of(context).title1,
             ),
             actions: [
-              Align(
-                alignment: AlignmentDirectional(0, 0),
-                child: FlutterFlowDropDown<String>(
-                  initialOption: dropDownValue ??= 'Completed',
-                  options: ['All', 'Active', 'Completed'],
-                  onChanged: (val) => setState(() => dropDownValue = val),
-                  width: 150,
-                  height: 60,
-                  textStyle: FlutterFlowTheme.of(context).bodyText1.override(
-                        fontFamily: 'Poppins',
-                        color: Colors.black,
-                        fontSize: 14,
-                      ),
-                  icon: Icon(
-                    Icons.filter_list_rounded,
-                    color: FlutterFlowTheme.of(context).primaryText,
-                    size: 40,
-                  ),
-                  fillColor: Color(0xFFD3D3D3),
-                  elevation: 2,
-                  borderColor: Colors.transparent,
-                  borderWidth: 0,
-                  borderRadius: 0,
-                  margin: EdgeInsetsDirectional.fromSTEB(12, 6, 12, 6),
-                  hidesUnderline: true,
+              FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 30,
+                borderWidth: 1,
+                buttonSize: 60,
+                icon: Icon(
+                  Icons.filter_list_outlined,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  size: 30,
                 ),
+                onPressed: () async {
+                  setState(
+                      () => FFAppState().showFilter = !FFAppState().showFilter);
+                  setState(() => FFAppState().showMenu = false);
+                },
               ),
               FlutterFlowIconButton(
                 borderColor: Colors.transparent,
@@ -173,11 +96,12 @@ class _TestPageWidgetState extends State<TestPageWidget> {
                 icon: Icon(
                   Icons.more_vert,
                   color: FlutterFlowTheme.of(context).primaryText,
-                  size: 40,
+                  size: 30,
                 ),
                 onPressed: () async {
                   setState(
                       () => FFAppState().showMenu = !FFAppState().showMenu);
+                  setState(() => FFAppState().showFilter = false);
                 },
               ),
             ],
@@ -191,13 +115,14 @@ class _TestPageWidgetState extends State<TestPageWidget> {
                 children: [
                   Column(
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       if (testPageTasksRecordList
                               .where((e) => () {
-                                    if (dropDownValue == 'All') {
+                                    if (FFAppState().FilterOption == 'All') {
                                       return (e != null);
-                                    } else if (dropDownValue == 'Active') {
+                                    } else if (FFAppState().FilterOption ==
+                                        'Active') {
                                       return !e.checked!;
                                     } else {
                                       return e.checked!;
@@ -210,12 +135,16 @@ class _TestPageWidgetState extends State<TestPageWidget> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  16, 16, 16, 16),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(16, 16, 0, 16),
                               child: Text(
-                                'All Tasks',
+                                FFAppState().FilterOption,
                                 style: FlutterFlowTheme.of(context).title2,
                               ),
+                            ),
+                            Text(
+                              ' Tasks',
+                              style: FlutterFlowTheme.of(context).title2,
                             ),
                           ],
                         ),
@@ -223,9 +152,10 @@ class _TestPageWidgetState extends State<TestPageWidget> {
                         builder: (context) {
                           final taskList = testPageTasksRecordList
                               .where((e) => () {
-                                    if (dropDownValue == 'All') {
+                                    if (FFAppState().FilterOption == 'All') {
                                       return (e != null);
-                                    } else if (dropDownValue == 'Active') {
+                                    } else if (FFAppState().FilterOption ==
+                                        'Active') {
                                       return !e.checked!;
                                     } else {
                                       return e.checked!;
@@ -265,6 +195,26 @@ class _TestPageWidgetState extends State<TestPageWidget> {
                                               checkboxValueMap[taskListItem] =
                                                   newValue!);
                                           if (newValue!) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'Task marked complete',
+                                                  style: TextStyle(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryBackground,
+                                                    fontWeight: FontWeight.w300,
+                                                  ),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 1000),
+                                                backgroundColor:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                              ),
+                                            );
+
                                             final tasksUpdateData =
                                                 createTasksRecordData(
                                               checked: true,
@@ -272,6 +222,26 @@ class _TestPageWidgetState extends State<TestPageWidget> {
                                             await taskListItem.reference
                                                 .update(tasksUpdateData);
                                           } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'Task marked active',
+                                                  style: TextStyle(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryBackground,
+                                                    fontWeight: FontWeight.w300,
+                                                  ),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 1000),
+                                                backgroundColor:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                              ),
+                                            );
+
                                             final tasksUpdateData =
                                                 createTasksRecordData(
                                               checked: false,
@@ -310,23 +280,130 @@ class _TestPageWidgetState extends State<TestPageWidget> {
                           );
                         },
                       ),
-                      Spacer(),
-                      if (testPageTasksRecordList
-                              .where((e) => () {
-                                    if (dropDownValue == 'All') {
-                                      return (e != null);
-                                    } else if (dropDownValue == 'Active') {
-                                      return !e.checked!;
-                                    } else {
-                                      return e.checked!;
-                                    }
-                                  }())
-                              .toList()
-                              .length ==
-                          0)
+                      if ((testPageTasksRecordList
+                                  .where((e) => () {
+                                        if (FFAppState().FilterOption ==
+                                            'All') {
+                                          return (e != null);
+                                        } else if (FFAppState().FilterOption ==
+                                            'Active') {
+                                          return !e.checked!;
+                                        } else {
+                                          return e.checked!;
+                                        }
+                                      }())
+                                  .toList()
+                                  .length ==
+                              0) &&
+                          (FFAppState().FilterOption == 'Completed'))
+                        Spacer(),
+                      if ((testPageTasksRecordList
+                                  .where((e) => () {
+                                        if (FFAppState().FilterOption ==
+                                            'All') {
+                                          return (e != null);
+                                        } else if (FFAppState().FilterOption ==
+                                            'Active') {
+                                          return !e.checked!;
+                                        } else {
+                                          return e.checked!;
+                                        }
+                                      }())
+                                  .toList()
+                                  .length ==
+                              0) &&
+                          (FFAppState().FilterOption == 'Completed'))
                         Expanded(
                           child: Column(
-                            mainAxisSize: MainAxisSize.max,
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: AlignmentDirectional(
+                                    0, -0.19999999999999996),
+                                children: [
+                                  Align(
+                                    alignment: AlignmentDirectional(0, 0),
+                                    child: Icon(
+                                      Icons.shield,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryColor,
+                                      size: 60,
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: AlignmentDirectional(0, 0.2),
+                                    child: Icon(
+                                      Icons.check_sharp,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryBtnText,
+                                      size: 45,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                'You have no completed tasks!',
+                                style: FlutterFlowTheme.of(context).bodyText1,
+                              ),
+                            ],
+                          ),
+                        ),
+                      if ((testPageTasksRecordList
+                                  .where((e) => () {
+                                        if (FFAppState().FilterOption ==
+                                            'All') {
+                                          return (e != null);
+                                        } else if (FFAppState().FilterOption ==
+                                            'Active') {
+                                          return !e.checked!;
+                                        } else {
+                                          return e.checked!;
+                                        }
+                                      }())
+                                  .toList()
+                                  .length ==
+                              0) &&
+                          (FFAppState().FilterOption == 'Active'))
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                color:
+                                    FlutterFlowTheme.of(context).primaryColor,
+                                size: 60,
+                              ),
+                              Text(
+                                'You have no active tasks!',
+                                style: FlutterFlowTheme.of(context).bodyText1,
+                              ),
+                            ],
+                          ),
+                        ),
+                      if ((testPageTasksRecordList
+                                  .where((e) => () {
+                                        if (FFAppState().FilterOption ==
+                                            'All') {
+                                          return (e != null);
+                                        } else if (FFAppState().FilterOption ==
+                                            'Active') {
+                                          return !e.checked!;
+                                        } else {
+                                          return e.checked!;
+                                        }
+                                      }())
+                                  .toList()
+                                  .length ==
+                              0) &&
+                          (FFAppState().FilterOption == 'All'))
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -337,115 +414,31 @@ class _TestPageWidgetState extends State<TestPageWidget> {
                                 fit: BoxFit.cover,
                               ),
                               Text(
-                                'No Tasks available',
+                                'You have no tasks!',
                                 style: FlutterFlowTheme.of(context).bodyText1,
                               ),
                             ],
                           ),
                         ),
-                      Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  16, 16, 16, 16),
-                              child: FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30,
-                                borderWidth: 1,
-                                buttonSize: 60,
-                                fillColor: Color(0xFF008200),
-                                icon: Icon(
-                                  Icons.add,
-                                  color: Color(0xFFD3D3D3),
-                                  size: 30,
-                                ),
-                                onPressed: () async {
-                                  context.pushNamed('AddTask');
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      if ((testPageTasksRecordList
+                                  .where((e) => () {
+                                        if (FFAppState().FilterOption ==
+                                            'All') {
+                                          return (e != null);
+                                        } else if (FFAppState().FilterOption ==
+                                            'Active') {
+                                          return !e.checked!;
+                                        } else {
+                                          return e.checked!;
+                                        }
+                                      }())
+                                  .toList()
+                                  .length ==
+                              0) &&
+                          (FFAppState().FilterOption == 'Completed'))
+                        Spacer(),
                     ],
                   ),
-                  if (FFAppState().showMenu)
-                    Align(
-                      alignment: AlignmentDirectional(1.03, -1.01),
-                      child: Container(
-                        width: 150,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 5,
-                              color: Color(0x3B1D2429),
-                              offset: Offset(0, -3),
-                            )
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            FFButtonWidget(
-                              onPressed: () {
-                                print('Button pressed ...');
-                              },
-                              text: 'Clear completed',
-                              options: FFButtonOptions(
-                                width: double.infinity,
-                                height: 45,
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .subtitle2
-                                    .override(
-                                      fontFamily: 'Outfit',
-                                      color: Color(0xFF14181B),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1,
-                                ),
-                              ),
-                            ),
-                            FFButtonWidget(
-                              onPressed: () {
-                                print('Button pressed ...');
-                              },
-                              text: 'Refresh',
-                              options: FFButtonOptions(
-                                width: double.infinity,
-                                height: 45,
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .subtitle2
-                                    .override(
-                                      fontFamily: 'Outfit',
-                                      color: Color(0xFF14181B),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                 ],
               ),
             ),

@@ -214,7 +214,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
                               .calculatePercentageTasks(
                                   statisticsTasksRecordList.length,
                                   statisticsTasksRecordList
-                                      .where((e) => e.checked! == true)
+                                      .where((e) => e.checked! != true)
                                       .toList()
                                       .length)
                               .toString(),

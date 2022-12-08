@@ -22,7 +22,7 @@ class FFAppState {
 
   bool showFilter = false;
 
-  String FilterOption = 'Active';
+  String FilterOption = 'All';
 }
 
 LatLng? _latLngFromString(String? val) {

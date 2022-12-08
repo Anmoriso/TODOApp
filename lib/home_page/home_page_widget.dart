@@ -398,6 +398,27 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           );
                         },
                       ),
+                      FFButtonWidget(
+                        onPressed: () async {
+                          context.pushNamed('TestPage');
+                        },
+                        text: 'Button',
+                        options: FFButtonOptions(
+                          width: 130,
+                          height: 40,
+                          color: FlutterFlowTheme.of(context).primaryColor,
+                          textStyle:
+                              FlutterFlowTheme.of(context).subtitle2.override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                  ),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
                       if ((homePageTasksRecordList
                                   .where((e) => () {
                                         if (FFAppState().FilterOption ==
@@ -433,7 +454,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           (FFAppState().FilterOption == 'Completed'))
                         Expanded(
                           child: Column(
-                            mainAxisSize: MainAxisSize.max,
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -453,7 +474,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   Align(
                                     alignment: AlignmentDirectional(0, 0.2),
                                     child: Icon(
-                                      Icons.check_outlined,
+                                      Icons.check_sharp,
                                       color: FlutterFlowTheme.of(context)
                                           .primaryBtnText,
                                       size: 45,
@@ -462,7 +483,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 ],
                               ),
                               Text(
-                                'You have no  completed tasks!',
+                                'You have no completed tasks!',
                                 style: FlutterFlowTheme.of(context).bodyText1,
                               ),
                             ],
@@ -486,7 +507,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           (FFAppState().FilterOption == 'Active'))
                         Expanded(
                           child: Column(
-                            mainAxisSize: MainAxisSize.max,
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -521,7 +542,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           (FFAppState().FilterOption == 'All'))
                         Expanded(
                           child: Column(
-                            mainAxisSize: MainAxisSize.max,
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [

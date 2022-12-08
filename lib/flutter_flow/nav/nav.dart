@@ -56,9 +56,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'HomePageCopy',
-              path: 'homePageCopy',
-              builder: (context, params) => HomePageCopyWidget(),
+              name: 'Statistics',
+              path: 'statistics',
+              builder: (context, params) => StatisticsWidget(),
             ),
             FFRoute(
               name: 'TaskDetails',
@@ -69,9 +69,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'Statistics',
-              path: 'statistics',
-              builder: (context, params) => StatisticsWidget(),
+              name: 'TestPage',
+              path: 'testPage',
+              builder: (context, params) => TestPageWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),

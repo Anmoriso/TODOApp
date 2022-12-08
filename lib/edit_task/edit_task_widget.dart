@@ -1,5 +1,4 @@
 import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -59,6 +58,41 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              if (formKey.currentState == null ||
+                  !formKey.currentState!.validate()) {
+                return;
+              }
+
+              final tasksUpdateData = createTasksRecordData(
+                title: titleController?.text ?? '',
+                details: taskdetailsController?.text ?? '',
+              );
+              await editTaskTasksRecord.reference.update(tasksUpdateData);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Task saved',
+                    style: TextStyle(
+                      color: FlutterFlowTheme.of(context).primaryText,
+                    ),
+                  ),
+                  duration: Duration(milliseconds: 4000),
+                  backgroundColor: Color(0x00000000),
+                ),
+              );
+
+              context.pushNamed('HomePage');
+            },
+            backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+            elevation: 8,
+            child: Icon(
+              Icons.check,
+              color: FlutterFlowTheme.of(context).primaryBtnText,
+              size: 30,
+            ),
+          ),
           appBar: AppBar(
             backgroundColor: Color(0xFFD3D3D3),
             iconTheme:
@@ -146,11 +180,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                             style: FlutterFlowTheme.of(context).title3,
                             validator: (val) {
                               if (val == null || val.isEmpty) {
-                                return 'Task cannot be empty';
-                              }
-
-                              if (val.length < 1) {
-                                return 'Task cannot be empty';
+                                return 'Title cannot be empty';
                               }
 
                               return null;
@@ -217,48 +247,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                                 return 'Task cannot be empty';
                               }
 
-                              if (val.length < 1) {
-                                return 'Task cannot be empty';
-                              }
-
                               return null;
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
-                          child: FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30,
-                            borderWidth: 1,
-                            buttonSize: 60,
-                            fillColor:
-                                FlutterFlowTheme.of(context).primaryColor,
-                            icon: Icon(
-                              Icons.check,
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              size: 30,
-                            ),
-                            onPressed: () async {
-                              final tasksUpdateData = createTasksRecordData(
-                                title: titleController?.text ?? '',
-                                details: taskdetailsController?.text ?? '',
-                              );
-                              await editTaskTasksRecord.reference
-                                  .update(tasksUpdateData);
-
-                              context.pushNamed('HomePage');
                             },
                           ),
                         ),

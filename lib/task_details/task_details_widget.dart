@@ -50,6 +50,26 @@ class _TaskDetailsWidgetState extends State<TaskDetailsWidget> {
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              context.pushNamed(
+                'EditTask',
+                queryParams: {
+                  'taskRef': serializeParam(
+                    widget.taskRef,
+                    ParamType.DocumentReference,
+                  ),
+                }.withoutNulls,
+              );
+            },
+            backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+            elevation: 8,
+            child: Icon(
+              Icons.mode_edit,
+              color: FlutterFlowTheme.of(context).primaryBtnText,
+              size: 30,
+            ),
+          ),
           appBar: AppBar(
             backgroundColor: Color(0xFFD3D3D3),
             iconTheme:
@@ -184,43 +204,6 @@ class _TaskDetailsWidgetState extends State<TaskDetailsWidget> {
                               style: FlutterFlowTheme.of(context).bodyText2,
                             ),
                           ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
-                          child: FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30,
-                            borderWidth: 1,
-                            buttonSize: 60,
-                            fillColor: Color(0xFF008200),
-                            icon: Icon(
-                              Icons.mode_edit,
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              size: 30,
-                            ),
-                            onPressed: () async {
-                              context.pushNamed(
-                                'EditTask',
-                                queryParams: {
-                                  'taskRef': serializeParam(
-                                    widget.taskRef,
-                                    ParamType.DocumentReference,
-                                  ),
-                                }.withoutNulls,
-                              );
-                            },
-                          ),
                         ),
                       ],
                     ),

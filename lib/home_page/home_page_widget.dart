@@ -291,12 +291,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                 checkboxValueMap[taskListItem] =
                                                     newValue!);
                                             if (newValue!) {
-                                              final tasksUpdateData =
-                                                  createTasksRecordData(
-                                                checked: true,
-                                              );
-                                              await taskListItem.reference
-                                                  .update(tasksUpdateData);
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                 SnackBar(
@@ -306,24 +300,26 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                       color: FlutterFlowTheme
                                                               .of(context)
                                                           .primaryBackground,
-                                                      height: 10,
+                                                      fontWeight:
+                                                          FontWeight.w300,
                                                     ),
                                                   ),
                                                   duration: Duration(
-                                                      milliseconds: 2000),
+                                                      milliseconds: 1000),
                                                   backgroundColor:
                                                       FlutterFlowTheme.of(
                                                               context)
                                                           .secondaryText,
                                                 ),
                                               );
-                                            } else {
+
                                               final tasksUpdateData =
                                                   createTasksRecordData(
-                                                checked: false,
+                                                checked: true,
                                               );
                                               await taskListItem.reference
                                                   .update(tasksUpdateData);
+                                            } else {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                 SnackBar(
@@ -333,17 +329,25 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                       color: FlutterFlowTheme
                                                               .of(context)
                                                           .primaryBackground,
-                                                      height: 10,
+                                                      fontWeight:
+                                                          FontWeight.w300,
                                                     ),
                                                   ),
                                                   duration: Duration(
-                                                      milliseconds: 2000),
+                                                      milliseconds: 1000),
                                                   backgroundColor:
                                                       FlutterFlowTheme.of(
                                                               context)
                                                           .secondaryText,
                                                 ),
                                               );
+
+                                              final tasksUpdateData =
+                                                  createTasksRecordData(
+                                                checked: false,
+                                              );
+                                              await taskListItem.reference
+                                                  .update(tasksUpdateData);
                                             }
                                           },
                                           activeColor: Color(0xFF008200),
@@ -521,17 +525,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     Align(
                       alignment: AlignmentDirectional(1.03, -1.01),
                       child: Container(
-                        width: 150,
+                        width: 160,
                         height: 90,
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 5,
-                              color: Color(0x3B1D2429),
-                              offset: Offset(0, -3),
-                            )
-                          ],
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
@@ -540,7 +538,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           children: [
                             FFButtonWidget(
                               onPressed: () {
-                                print('Button pressed ...');
+                                print('ClearCompleted pressed ...');
                               },
                               text: 'Clear completed',
                               options: FFButtonOptions(
@@ -551,7 +549,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 textStyle: FlutterFlowTheme.of(context)
                                     .subtitle2
                                     .override(
-                                      fontFamily: 'Outfit',
+                                      fontFamily: 'Poppins',
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
                                       fontSize: 16,
@@ -561,11 +559,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   color: Colors.transparent,
                                   width: 1,
                                 ),
+                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                             FFButtonWidget(
                               onPressed: () {
-                                print('Button pressed ...');
+                                print('Refresh pressed ...');
                               },
                               text: 'Refresh',
                               options: FFButtonOptions(
@@ -576,7 +575,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 textStyle: FlutterFlowTheme.of(context)
                                     .subtitle2
                                     .override(
-                                      fontFamily: 'Outfit',
+                                      fontFamily: 'Poppins',
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
                                       fontSize: 16,
@@ -586,6 +585,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   color: Colors.transparent,
                                   width: 1,
                                 ),
+                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                           ],
@@ -623,6 +623,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         fontFamily: 'Poppins',
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                   borderSide: BorderSide(
                                     color: Colors.transparent,

@@ -9,14 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomePageCopyWidget extends StatefulWidget {
-  const HomePageCopyWidget({Key? key}) : super(key: key);
+class TestPageWidget extends StatefulWidget {
+  const TestPageWidget({Key? key}) : super(key: key);
 
   @override
-  _HomePageCopyWidgetState createState() => _HomePageCopyWidgetState();
+  _TestPageWidgetState createState() => _TestPageWidgetState();
 }
 
-class _HomePageCopyWidgetState extends State<HomePageCopyWidget> {
+class _TestPageWidgetState extends State<TestPageWidget> {
   Map<TasksRecord, bool> checkboxValueMap = {};
   List<TasksRecord> get checkboxCheckedItems =>
       checkboxValueMap.entries.where((e) => e.value).map((e) => e.key).toList();
@@ -48,7 +48,7 @@ class _HomePageCopyWidgetState extends State<HomePageCopyWidget> {
             ),
           );
         }
-        List<TasksRecord> homePageCopyTasksRecordList = snapshot.data!;
+        List<TasksRecord> testPageTasksRecordList = snapshot.data!;
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -134,7 +134,7 @@ class _HomePageCopyWidgetState extends State<HomePageCopyWidget> {
               },
             ),
             title: Text(
-              'Todo',
+              'Test Page',
               style: FlutterFlowTheme.of(context).title1,
             ),
             actions: [
@@ -193,7 +193,7 @@ class _HomePageCopyWidgetState extends State<HomePageCopyWidget> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (homePageCopyTasksRecordList
+                      if (testPageTasksRecordList
                               .where((e) => () {
                                     if (dropDownValue == 'All') {
                                       return (e != null);
@@ -221,7 +221,7 @@ class _HomePageCopyWidgetState extends State<HomePageCopyWidget> {
                         ),
                       Builder(
                         builder: (context) {
-                          final taskList = homePageCopyTasksRecordList
+                          final taskList = testPageTasksRecordList
                               .where((e) => () {
                                     if (dropDownValue == 'All') {
                                       return (e != null);
@@ -311,7 +311,7 @@ class _HomePageCopyWidgetState extends State<HomePageCopyWidget> {
                         },
                       ),
                       Spacer(),
-                      if (homePageCopyTasksRecordList
+                      if (testPageTasksRecordList
                               .where((e) => () {
                                     if (dropDownValue == 'All') {
                                       return (e != null);

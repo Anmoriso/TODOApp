@@ -1,5 +1,4 @@
 import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,6 +38,42 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          if (formKey.currentState == null ||
+              !formKey.currentState!.validate()) {
+            return;
+          }
+
+          final tasksCreateData = createTasksRecordData(
+            title: taskTitleController!.text,
+            details: taskdescriptionController!.text,
+            checked: false,
+          );
+          await TasksRecord.collection.doc().set(tasksCreateData);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Task added',
+                style: TextStyle(
+                  color: FlutterFlowTheme.of(context).primaryText,
+                ),
+              ),
+              duration: Duration(milliseconds: 4000),
+              backgroundColor: Color(0x00000000),
+            ),
+          );
+
+          context.pushNamed('HomePage');
+        },
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+        elevation: 8,
+        child: Icon(
+          Icons.check,
+          color: FlutterFlowTheme.of(context).primaryBtnText,
+          size: 30,
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Color(0xFFD3D3D3),
         iconTheme:
@@ -131,7 +166,7 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
                                   style: FlutterFlowTheme.of(context).title3,
                                   validator: (val) {
                                     if (val == null || val.isEmpty) {
-                                      return 'Task cannot be empty';
+                                      return 'Title cannot be empty';
                                     }
 
                                     return null;
@@ -207,61 +242,6 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
                     ),
                   ),
                 ],
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
-                      child: FlutterFlowIconButton(
-                        borderColor: Colors.transparent,
-                        borderRadius: 30,
-                        borderWidth: 1,
-                        buttonSize: 60,
-                        fillColor: Color(0xFF008200),
-                        icon: Icon(
-                          Icons.check,
-                          color: Color(0xFFD3D3D3),
-                          size: 30,
-                        ),
-                        onPressed: () async {
-                          if (formKey.currentState == null ||
-                              !formKey.currentState!.validate()) {
-                            return;
-                          }
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Task added',
-                                style: TextStyle(
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                ),
-                              ),
-                              duration: Duration(milliseconds: 4000),
-                              backgroundColor: Color(0x00000000),
-                            ),
-                          );
-
-                          final tasksCreateData = createTasksRecordData(
-                            title: taskTitleController!.text,
-                            details: taskdescriptionController!.text,
-                            checked: false,
-                          );
-                          await TasksRecord.collection
-                              .doc()
-                              .set(tasksCreateData);
-
-                          context.pushNamed('HomePage');
-                        },
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),

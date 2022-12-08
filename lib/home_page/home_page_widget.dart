@@ -55,14 +55,35 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Image.asset(
-                  'assets/images/logo_no_fill.png',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.contain,
+                Container(
+                  width: double.infinity,
+                  height: 160,
+                  decoration: BoxDecoration(
+                    color: Color(0xFF072632),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/logo_no_fill.png',
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.contain,
+                      ),
+                      Text(
+                        'TODO',
+                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                              fontFamily: 'Poppins',
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                            ),
+                      ),
+                    ],
+                  ),
                 ),
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                  padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
                   child: InkWell(
                     onTap: () async {
                       context.pushNamed('HomePage');
@@ -72,14 +93,20 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       children: [
                         FaIcon(
                           FontAwesomeIcons.tasks,
-                          color: Colors.black,
+                          color: FlutterFlowTheme.of(context).primaryColor,
                           size: 24,
                         ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
                           child: Text(
                             'Task List',
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: FlutterFlowTheme.of(context)
+                                .bodyText1
+                                .override(
+                                  fontFamily: 'Poppins',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                ),
                           ),
                         ),
                       ],
@@ -87,7 +114,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                  padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
                   child: InkWell(
                     onTap: () async {
                       context.pushNamed('Statistics');
@@ -146,8 +173,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   color: FlutterFlowTheme.of(context).primaryText,
                   size: 40,
                 ),
-                onPressed: () {
-                  print('IconButton pressed ...');
+                onPressed: () async {
+                  setState(
+                      () => FFAppState().showFilter = !FFAppState().showFilter);
+                  setState(() => FFAppState().showMenu = false);
                 },
               ),
               FlutterFlowIconButton(
@@ -163,6 +192,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 onPressed: () async {
                   setState(
                       () => FFAppState().showMenu = !FFAppState().showMenu);
+                  setState(() => FFAppState().showFilter = false);
                 },
               ),
             ],
@@ -177,6 +207,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   InkWell(
                     onTap: () async {
                       setState(() => FFAppState().showMenu = false);
+                      setState(() => FFAppState().showFilter = false);
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
@@ -201,11 +232,15 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    16, 16, 16, 16),
+                                    16, 16, 0, 16),
                                 child: Text(
-                                  'All Tasks',
+                                  FFAppState().FilterOption,
                                   style: FlutterFlowTheme.of(context).title2,
                                 ),
+                              ),
+                              Text(
+                                ' Tasks',
+                                style: FlutterFlowTheme.of(context).title2,
                               ),
                             ],
                           ),
@@ -302,20 +337,95 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           },
                         ),
                         Spacer(),
-                        if (homePageTasksRecordList
-                                .where((e) => () {
-                                      if (FFAppState().FilterOption == 'All') {
-                                        return (e != null);
-                                      } else if (FFAppState().FilterOption ==
-                                          'Active') {
-                                        return !e.checked!;
-                                      } else {
-                                        return e.checked!;
-                                      }
-                                    }())
-                                .toList()
-                                .length ==
-                            0)
+                        if ((homePageTasksRecordList
+                                    .where((e) => () {
+                                          if (FFAppState().FilterOption ==
+                                              'All') {
+                                            return (e != null);
+                                          } else if (FFAppState()
+                                                  .FilterOption ==
+                                              'Active') {
+                                            return !e.checked!;
+                                          } else {
+                                            return e.checked!;
+                                          }
+                                        }())
+                                    .toList()
+                                    .length ==
+                                0) &&
+                            (FFAppState().FilterOption == 'Active'))
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.shield,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                  size: 60,
+                                ),
+                                Text(
+                                  'You have no  completed tasks!',
+                                  style: FlutterFlowTheme.of(context).bodyText1,
+                                ),
+                              ],
+                            ),
+                          ),
+                        if ((homePageTasksRecordList
+                                    .where((e) => () {
+                                          if (FFAppState().FilterOption ==
+                                              'All') {
+                                            return (e != null);
+                                          } else if (FFAppState()
+                                                  .FilterOption ==
+                                              'Active') {
+                                            return !e.checked!;
+                                          } else {
+                                            return e.checked!;
+                                          }
+                                        }())
+                                    .toList()
+                                    .length ==
+                                0) &&
+                            (FFAppState().FilterOption == 'Active'))
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                  size: 60,
+                                ),
+                                Text(
+                                  'You have no active tasks!',
+                                  style: FlutterFlowTheme.of(context).bodyText1,
+                                ),
+                              ],
+                            ),
+                          ),
+                        if ((homePageTasksRecordList
+                                    .where((e) => () {
+                                          if (FFAppState().FilterOption ==
+                                              'All') {
+                                            return (e != null);
+                                          } else if (FFAppState()
+                                                  .FilterOption ==
+                                              'Active') {
+                                            return !e.checked!;
+                                          } else {
+                                            return e.checked!;
+                                          }
+                                        }())
+                                    .toList()
+                                    .length ==
+                                0) &&
+                            (FFAppState().FilterOption == 'All'))
                           Expanded(
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
@@ -329,7 +439,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   fit: BoxFit.cover,
                                 ),
                                 Text(
-                                  'No Tasks available',
+                                  'You have no tasks!',
                                   style: FlutterFlowTheme.of(context).bodyText1,
                                 ),
                               ],

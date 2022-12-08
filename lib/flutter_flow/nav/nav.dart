@@ -43,14 +43,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => HomePageWidget(),
             ),
             FFRoute(
-              name: 'TaskDetails',
-              path: 'taskDetails',
-              builder: (context, params) => TaskDetailsWidget(
-                taskRef: params.getParam(
-                    'taskRef', ParamType.DocumentReference, false, 'tasks'),
-              ),
-            ),
-            FFRoute(
               name: 'AddTask',
               path: 'addTask',
               builder: (context, params) => AddTaskWidget(),
@@ -64,14 +56,22 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'Statistics',
-              path: 'statistics',
-              builder: (context, params) => StatisticsWidget(),
-            ),
-            FFRoute(
               name: 'HomePageCopy',
               path: 'homePageCopy',
               builder: (context, params) => HomePageCopyWidget(),
+            ),
+            FFRoute(
+              name: 'TaskDetails',
+              path: 'taskDetails',
+              builder: (context, params) => TaskDetailsWidget(
+                taskRef: params.getParam(
+                    'taskRef', ParamType.DocumentReference, false, 'tasks'),
+              ),
+            ),
+            FFRoute(
+              name: 'Statistics',
+              path: 'statistics',
+              builder: (context, params) => StatisticsWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),

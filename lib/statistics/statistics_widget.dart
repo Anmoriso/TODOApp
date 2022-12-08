@@ -1,4 +1,3 @@
-import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -25,163 +24,178 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<TasksRecord>>(
-      stream: queryTasksRecord(),
-      builder: (context, snapshot) {
-        // Customize what your widget looks like when it's loading.
-        if (!snapshot.hasData) {
-          return Center(
-            child: SizedBox(
-              width: 50,
-              height: 50,
-              child: CircularProgressIndicator(
-                color: FlutterFlowTheme.of(context).primaryColor,
+    return Scaffold(
+      key: scaffoldKey,
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      drawer: Drawer(
+        elevation: 16,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Container(
+              width: double.infinity,
+              height: 160,
+              decoration: BoxDecoration(
+                color: Color(0xFF072632),
               ),
-            ),
-          );
-        }
-        List<TasksRecord> statisticsTasksRecordList = snapshot.data!;
-        return Scaffold(
-          key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          drawer: Drawer(
-            elevation: 16,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Image.asset(
-                  'assets/images/logo_no_fill.png',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.contain,
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                  child: InkWell(
-                    onTap: () async {
-                      context.pushNamed('HomePage');
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.tasks,
-                          color: Colors.black,
-                          size: 24,
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                          child: Text(
-                            'Task List',
-                            style: FlutterFlowTheme.of(context).bodyText1,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Icon(
-                        Icons.bar_chart,
-                        color: Colors.black,
-                        size: 24,
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                        child: Text(
-                          'Statistics',
-                          style: FlutterFlowTheme.of(context).bodyText1,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          appBar: AppBar(
-            backgroundColor: Color(0xFFD3D3D3),
-            automaticallyImplyLeading: false,
-            leading: FlutterFlowIconButton(
-              borderColor: Colors.transparent,
-              borderRadius: 30,
-              borderWidth: 1,
-              buttonSize: 60,
-              icon: Icon(
-                Icons.menu,
-                color: FlutterFlowTheme.of(context).primaryText,
-                size: 40,
-              ),
-              onPressed: () async {
-                scaffoldKey.currentState!.openDrawer();
-              },
-            ),
-            title: Text(
-              'Statistics',
-              style: FlutterFlowTheme.of(context).title1,
-            ),
-            actions: [],
-            centerTitle: false,
-            elevation: 2,
-          ),
-          body: SafeArea(
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Active tasks: ',
-                          style: FlutterFlowTheme.of(context).bodyText1,
-                        ),
-                        Text(
-                          'percent',
-                          style: FlutterFlowTheme.of(context).bodyText1,
-                        ),
-                        Text(
-                          '%',
-                          style: FlutterFlowTheme.of(context).bodyText1,
-                        ),
-                      ],
-                    ),
+                  Image.asset(
+                    'assets/images/logo_no_fill.png',
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.contain,
                   ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Completed tasks: ',
-                          style: FlutterFlowTheme.of(context).bodyText1,
+                  Text(
+                    'TODO',
+                    style: FlutterFlowTheme.of(context).bodyText1.override(
+                          fontFamily: 'Poppins',
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
                         ),
-                        Text(
-                          'percent',
-                          style: FlutterFlowTheme.of(context).bodyText1,
-                        ),
-                        Text(
-                          '%',
-                          style: FlutterFlowTheme.of(context).bodyText1,
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),
             ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
+              child: InkWell(
+                onTap: () async {
+                  context.pushNamed('HomePage');
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    FaIcon(
+                      FontAwesomeIcons.tasks,
+                      color: Colors.black,
+                      size: 24,
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                      child: Text(
+                        'Task List',
+                        style: FlutterFlowTheme.of(context).bodyText1,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
+              child: InkWell(
+                onTap: () async {
+                  context.pushNamed('Statistics');
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Icon(
+                      Icons.bar_chart,
+                      color: FlutterFlowTheme.of(context).primaryColor,
+                      size: 24,
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                      child: Text(
+                        'Statistics',
+                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                              fontFamily: 'Poppins',
+                              color: FlutterFlowTheme.of(context).primaryColor,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      appBar: AppBar(
+        backgroundColor: Color(0xFFD3D3D3),
+        iconTheme:
+            IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
+        automaticallyImplyLeading: true,
+        leading: FlutterFlowIconButton(
+          borderColor: Colors.transparent,
+          borderRadius: 30,
+          borderWidth: 1,
+          buttonSize: 60,
+          icon: Icon(
+            Icons.menu,
+            color: FlutterFlowTheme.of(context).primaryText,
+            size: 30,
           ),
-        );
-      },
+          onPressed: () async {
+            scaffoldKey.currentState!.openDrawer();
+          },
+        ),
+        title: Text(
+          'Statistics',
+          style: FlutterFlowTheme.of(context).title2.override(
+                fontFamily: 'Poppins',
+                color: FlutterFlowTheme.of(context).primaryText,
+                fontSize: 22,
+              ),
+        ),
+        actions: [],
+        centerTitle: false,
+        elevation: 2,
+      ),
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      'Active tasks: ',
+                      style: FlutterFlowTheme.of(context).bodyText1,
+                    ),
+                    Text(
+                      'percent',
+                      style: FlutterFlowTheme.of(context).bodyText1,
+                    ),
+                    Text(
+                      '%',
+                      style: FlutterFlowTheme.of(context).bodyText1,
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      'Completed tasks: ',
+                      style: FlutterFlowTheme.of(context).bodyText1,
+                    ),
+                    Text(
+                      'percent',
+                      style: FlutterFlowTheme.of(context).bodyText1,
+                    ),
+                    Text(
+                      '%',
+                      style: FlutterFlowTheme.of(context).bodyText1,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

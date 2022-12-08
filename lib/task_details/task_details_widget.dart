@@ -126,6 +126,7 @@ class _TaskDetailsWidgetState extends State<TaskDetailsWidget> {
                         ),
                         Column(
                           mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               taskDetailsTasksRecord.title!,

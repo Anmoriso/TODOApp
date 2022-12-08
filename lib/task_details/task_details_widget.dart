@@ -75,6 +75,19 @@ class _TaskDetailsWidgetState extends State<TaskDetailsWidget> {
                   size: 30,
                 ),
                 onPressed: () async {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Task was deleted',
+                        style: TextStyle(
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                      duration: Duration(milliseconds: 1000),
+                      backgroundColor: Color(0x00000000),
+                    ),
+                  );
                   await taskDetailsTasksRecord.reference.delete();
 
                   context.pushNamed('HomePage');
@@ -110,11 +123,45 @@ class _TaskDetailsWidgetState extends State<TaskDetailsWidget> {
                             onChanged: (newValue) async {
                               setState(() => checkboxValue = newValue!);
                               if (newValue!) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Task marked complete',
+                                      style: TextStyle(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryBackground,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                    duration: Duration(milliseconds: 1000),
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                  ),
+                                );
+
                                 final tasksUpdateData = createTasksRecordData(
                                   checked: true,
                                 );
                                 await widget.taskRef!.update(tasksUpdateData);
                               } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Task marked active',
+                                      style: TextStyle(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryBackground,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                    duration: Duration(milliseconds: 1000),
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                  ),
+                                );
+
                                 final tasksUpdateData = createTasksRecordData(
                                   checked: false,
                                 );

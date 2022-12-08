@@ -233,17 +233,6 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
                             return;
                           }
 
-                          final tasksCreateData = createTasksRecordData(
-                            title: taskTitleController!.text,
-                            details: taskdescriptionController!.text,
-                            checked: false,
-                          );
-                          await TasksRecord.collection
-                              .doc()
-                              .set(tasksCreateData);
-
-                          context.pushNamed('HomePage');
-
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -257,6 +246,17 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
                               backgroundColor: Color(0x00000000),
                             ),
                           );
+
+                          final tasksCreateData = createTasksRecordData(
+                            title: taskTitleController!.text,
+                            details: taskdescriptionController!.text,
+                            checked: false,
+                          );
+                          await TasksRecord.collection
+                              .doc()
+                              .set(tasksCreateData);
+
+                          context.pushNamed('HomePage');
                         },
                       ),
                     ),

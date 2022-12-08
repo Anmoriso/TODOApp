@@ -23,6 +23,13 @@ class _TaskDetailsWidgetState extends State<TaskDetailsWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<TasksRecord>(
       stream: TasksRecord.getDocument(widget.taskRef!),
@@ -68,6 +75,19 @@ class _TaskDetailsWidgetState extends State<TaskDetailsWidget> {
                   size: 30,
                 ),
                 onPressed: () async {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Task was deleted',
+                        style: TextStyle(
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                      duration: Duration(milliseconds: 1000),
+                      backgroundColor: Color(0x00000000),
+                    ),
+                  );
                   await taskDetailsTasksRecord.reference.delete();
 
                   context.pushNamed('HomePage');
@@ -103,11 +123,45 @@ class _TaskDetailsWidgetState extends State<TaskDetailsWidget> {
                             onChanged: (newValue) async {
                               setState(() => checkboxValue = newValue!);
                               if (newValue!) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Task marked complete',
+                                      style: TextStyle(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryBackground,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                    duration: Duration(milliseconds: 1000),
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                  ),
+                                );
+
                                 final tasksUpdateData = createTasksRecordData(
                                   checked: true,
                                 );
                                 await widget.taskRef!.update(tasksUpdateData);
                               } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Task marked active',
+                                      style: TextStyle(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryBackground,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                    duration: Duration(milliseconds: 1000),
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                  ),
+                                );
+
                                 final tasksUpdateData = createTasksRecordData(
                                   checked: false,
                                 );
@@ -119,6 +173,7 @@ class _TaskDetailsWidgetState extends State<TaskDetailsWidget> {
                         ),
                         Column(
                           mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               taskDetailsTasksRecord.title!,
@@ -150,7 +205,8 @@ class _TaskDetailsWidgetState extends State<TaskDetailsWidget> {
                             fillColor: Color(0xFF008200),
                             icon: Icon(
                               Icons.mode_edit,
-                              color: Color(0xFFD3D3D3),
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
                               size: 30,
                             ),
                             onPressed: () async {

@@ -14,21 +14,23 @@ class AddTaskWidget extends StatefulWidget {
 }
 
 class _AddTaskWidgetState extends State<AddTaskWidget> {
-  TextEditingController? textController1;
-  TextEditingController? textController2;
+  TextEditingController? taskTitleController;
+  TextEditingController? taskdescriptionController;
+  final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    textController1 = TextEditingController();
-    textController2 = TextEditingController();
+    taskTitleController = TextEditingController();
+    taskdescriptionController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
-    textController1?.dispose();
-    textController2?.dispose();
+    taskTitleController?.dispose();
+    taskdescriptionController?.dispose();
     super.dispose();
   }
 
@@ -68,123 +70,137 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
-                          child: TextFormField(
-                            controller: textController1,
-                            onFieldSubmitted: (_) async {
-                              final tasksCreateData = createTasksRecordData(
-                                title: textController1!.text,
-                                details: textController2!.text,
-                              );
-                              await TasksRecord.collection
-                                  .doc()
-                                  .set(tasksCreateData);
+                        Form(
+                          key: formKey,
+                          autovalidateMode: AutovalidateMode.disabled,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16, 16, 16, 16),
+                                child: TextFormField(
+                                  controller: taskTitleController,
+                                  autofocus: true,
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                    hintText: 'Title',
+                                    hintStyle:
+                                        FlutterFlowTheme.of(context).bodyText2,
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    focusedErrorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                  ),
+                                  style: FlutterFlowTheme.of(context).title3,
+                                  validator: (val) {
+                                    if (val == null || val.isEmpty) {
+                                      return 'Task cannot be empty';
+                                    }
 
-                              context.pushNamed('HomePage');
-                            },
-                            autofocus: true,
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              hintText: 'Title',
-                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
+                                    return null;
+                                  },
                                 ),
                               ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                              errorBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                              focusedErrorBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                            ),
-                            style: FlutterFlowTheme.of(context).title3,
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
-                          child: TextFormField(
-                            controller: textController2,
-                            autofocus: true,
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              hintText: 'Enter your task here.',
-                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16, 16, 16, 16),
+                                child: TextFormField(
+                                  controller: taskdescriptionController,
+                                  autofocus: true,
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                    hintText: 'Enter your task here.',
+                                    hintStyle:
+                                        FlutterFlowTheme.of(context).bodyText2,
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    focusedErrorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                  ),
+                                  style: FlutterFlowTheme.of(context).bodyText1,
+                                  validator: (val) {
+                                    if (val == null || val.isEmpty) {
+                                      return 'Task cannot be empty';
+                                    }
+
+                                    return null;
+                                  },
                                 ),
                               ),
-                              errorBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                              focusedErrorBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                            ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            ],
                           ),
                         ),
                       ],
@@ -212,9 +228,28 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
                           size: 30,
                         ),
                         onPressed: () async {
+                          if (formKey.currentState == null ||
+                              !formKey.currentState!.validate()) {
+                            return;
+                          }
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Task added',
+                                style: TextStyle(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                ),
+                              ),
+                              duration: Duration(milliseconds: 4000),
+                              backgroundColor: Color(0x00000000),
+                            ),
+                          );
+
                           final tasksCreateData = createTasksRecordData(
-                            title: textController1!.text,
-                            details: textController2!.text,
+                            title: taskTitleController!.text,
+                            details: taskdescriptionController!.text,
                             checked: false,
                           );
                           await TasksRecord.collection

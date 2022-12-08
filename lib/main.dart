@@ -14,6 +14,8 @@ void main() async {
   await Firebase.initializeApp();
   await FlutterFlowTheme.initialize();
 
+  FFAppState(); // Initialize FFAppState
+
   runApp(MyApp());
 }
 

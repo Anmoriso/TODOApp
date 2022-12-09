@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key}) : super(key: key);
@@ -32,6 +33,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<List<TasksRecord>>(
       stream: queryTasksRecord(),
       builder: (context, snapshot) {
@@ -169,8 +172,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               ),
               onPressed: () async {
                 scaffoldKey.currentState!.openDrawer();
-                setState(() => FFAppState().showMenu = false);
-                setState(() => FFAppState().showFilter = false);
+                setState(() {
+                  FFAppState().showMenu = false;
+                  FFAppState().showFilter = false;
+                });
               },
             ),
             title: Text(
@@ -189,9 +194,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   size: 30,
                 ),
                 onPressed: () async {
-                  setState(
-                      () => FFAppState().showFilter = !FFAppState().showFilter);
-                  setState(() => FFAppState().showMenu = false);
+                  setState(() {
+                    FFAppState().showFilter = !FFAppState().showFilter;
+                    FFAppState().showMenu = false;
+                  });
                 },
               ),
               FlutterFlowIconButton(
@@ -205,9 +211,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   size: 30,
                 ),
                 onPressed: () async {
-                  setState(
-                      () => FFAppState().showMenu = !FFAppState().showMenu);
-                  setState(() => FFAppState().showFilter = false);
+                  setState(() {
+                    FFAppState().showMenu = !FFAppState().showMenu;
+                    FFAppState().showFilter = false;
+                  });
                 },
               ),
             ],
@@ -222,8 +229,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   if (FFAppState().showMenu || FFAppState().showFilter)
                     InkWell(
                       onTap: () async {
-                        setState(() => FFAppState().showMenu = false);
-                        setState(() => FFAppState().showFilter = false);
+                        setState(() {
+                          FFAppState().showMenu = false;
+                          FFAppState().showFilter = false;
+                        });
                       },
                       child: Container(
                         width: double.infinity,
@@ -266,157 +275,142 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             ),
                           ],
                         ),
-                      Builder(
-                        builder: (context) {
-                          final taskList = homePageTasksRecordList
-                              .where((e) => () {
-                                    if (FFAppState().FilterOption == 'All') {
-                                      return (e != null);
-                                    } else if (FFAppState().FilterOption ==
-                                        'Active') {
-                                      return !e.checked!;
-                                    } else {
-                                      return e.checked!;
-                                    }
-                                  }())
-                              .toList();
-                          return ListView.builder(
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount: taskList.length,
-                            itemBuilder: (context, taskListIndex) {
-                              final taskListItem = taskList[taskListIndex];
-                              return Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    32, 8, 32, 32),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Theme(
-                                      data: ThemeData(
-                                        checkboxTheme: CheckboxThemeData(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(0),
+                      Expanded(
+                        child: Builder(
+                          builder: (context) {
+                            final taskList = homePageTasksRecordList
+                                .where((e) => () {
+                                      if (FFAppState().FilterOption == 'All') {
+                                        return (e != null);
+                                      } else if (FFAppState().FilterOption ==
+                                          'Active') {
+                                        return !e.checked!;
+                                      } else {
+                                        return e.checked!;
+                                      }
+                                    }())
+                                .toList();
+                            return ListView.builder(
+                              padding: EdgeInsets.zero,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              itemCount: taskList.length,
+                              itemBuilder: (context, taskListIndex) {
+                                final taskListItem = taskList[taskListIndex];
+                                return Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      32, 8, 32, 32),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Theme(
+                                        data: ThemeData(
+                                          checkboxTheme: CheckboxThemeData(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(0),
+                                            ),
+                                          ),
+                                          unselectedWidgetColor:
+                                              Color(0xFFD3D3D3),
+                                        ),
+                                        child: Checkbox(
+                                          value:
+                                              checkboxValueMap[taskListItem] ??=
+                                                  taskListItem.checked!,
+                                          onChanged: (newValue) async {
+                                            setState(() =>
+                                                checkboxValueMap[taskListItem] =
+                                                    newValue!);
+                                            if (newValue!) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    'Task marked complete',
+                                                    style: TextStyle(
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
+                                                          .primaryBackground,
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                    ),
+                                                  ),
+                                                  duration: Duration(
+                                                      milliseconds: 1000),
+                                                  backgroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .secondaryText,
+                                                ),
+                                              );
+
+                                              final tasksUpdateData =
+                                                  createTasksRecordData(
+                                                checked: true,
+                                              );
+                                              await taskListItem.reference
+                                                  .update(tasksUpdateData);
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    'Task marked active',
+                                                    style: TextStyle(
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
+                                                          .primaryBackground,
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                    ),
+                                                  ),
+                                                  duration: Duration(
+                                                      milliseconds: 1000),
+                                                  backgroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .secondaryText,
+                                                ),
+                                              );
+
+                                              final tasksUpdateData =
+                                                  createTasksRecordData(
+                                                checked: false,
+                                              );
+                                              await taskListItem.reference
+                                                  .update(tasksUpdateData);
+                                            }
+                                          },
+                                          activeColor: Color(0xFF008200),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: () async {
+                                            context.pushNamed(
+                                              'TaskDetails',
+                                              queryParams: {
+                                                'taskRef': serializeParam(
+                                                  taskListItem.reference,
+                                                  ParamType.DocumentReference,
+                                                ),
+                                              }.withoutNulls,
+                                            );
+                                          },
+                                          child: Text(
+                                            taskListItem.title!,
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText1,
                                           ),
                                         ),
-                                        unselectedWidgetColor:
-                                            Color(0xFFD3D3D3),
                                       ),
-                                      child: Checkbox(
-                                        value:
-                                            checkboxValueMap[taskListItem] ??=
-                                                taskListItem.checked!,
-                                        onChanged: (newValue) async {
-                                          setState(() =>
-                                              checkboxValueMap[taskListItem] =
-                                                  newValue!);
-                                          if (newValue!) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  'Task marked complete',
-                                                  style: TextStyle(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryBackground,
-                                                    fontWeight: FontWeight.w300,
-                                                  ),
-                                                ),
-                                                duration: Duration(
-                                                    milliseconds: 1000),
-                                                backgroundColor:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryText,
-                                              ),
-                                            );
-
-                                            final tasksUpdateData =
-                                                createTasksRecordData(
-                                              checked: true,
-                                            );
-                                            await taskListItem.reference
-                                                .update(tasksUpdateData);
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  'Task marked active',
-                                                  style: TextStyle(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryBackground,
-                                                    fontWeight: FontWeight.w300,
-                                                  ),
-                                                ),
-                                                duration: Duration(
-                                                    milliseconds: 1000),
-                                                backgroundColor:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryText,
-                                              ),
-                                            );
-
-                                            final tasksUpdateData =
-                                                createTasksRecordData(
-                                              checked: false,
-                                            );
-                                            await taskListItem.reference
-                                                .update(tasksUpdateData);
-                                          }
-                                        },
-                                        activeColor: Color(0xFF008200),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: () async {
-                                          context.pushNamed(
-                                            'TaskDetails',
-                                            queryParams: {
-                                              'taskRef': serializeParam(
-                                                taskListItem.reference,
-                                                ParamType.DocumentReference,
-                                              ),
-                                            }.withoutNulls,
-                                          );
-                                        },
-                                        child: Text(
-                                          taskListItem.title!,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      FFButtonWidget(
-                        onPressed: () async {
-                          context.pushNamed('TestPage');
-                        },
-                        text: 'Button',
-                        options: FFButtonOptions(
-                          width: 130,
-                          height: 40,
-                          color: FlutterFlowTheme.of(context).primaryColor,
-                          textStyle:
-                              FlutterFlowTheme.of(context).subtitle2.override(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
+                                    ],
                                   ),
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
+                                );
+                              },
+                            );
+                          },
                         ),
                       ),
                       if ((homePageTasksRecordList
@@ -593,63 +587,71 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            FFButtonWidget(
-                              onPressed: () async {
-                                await actions.clearCompletedTasks(
-                                  homePageTasksRecordList
-                                      .where((e) => e.checked!)
-                                      .toList()
-                                      .map((e) => e.reference)
-                                      .toList(),
-                                );
-                                setState(() => FFAppState().showMenu = false);
-                              },
-                              text: 'Clear completed',
-                              options: FFButtonOptions(
-                                width: double.infinity,
-                                height: 45,
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .subtitle2
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1,
+                            Expanded(
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  await actions.clearCompletedTasks(
+                                    homePageTasksRecordList
+                                        .where((e) => e.checked!)
+                                        .toList()
+                                        .map((e) => e.reference)
+                                        .toList(),
+                                  );
+                                  setState(() {
+                                    FFAppState().showMenu = false;
+                                  });
+                                },
+                                text: 'Clear completed',
+                                options: FFButtonOptions(
+                                  width: double.infinity,
+                                  height: 45,
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .subtitle2
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(1),
                                 ),
-                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            FFButtonWidget(
-                              onPressed: () async {
-                                setState(() => FFAppState().showMenu = false);
-                              },
-                              text: 'Refresh',
-                              options: FFButtonOptions(
-                                width: double.infinity,
-                                height: 45,
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .subtitle2
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1,
+                            Expanded(
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  setState(() {
+                                    FFAppState().showMenu = false;
+                                  });
+                                },
+                                text: 'Refresh',
+                                options: FFButtonOptions(
+                                  width: double.infinity,
+                                  height: 45,
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .subtitle2
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(1),
                                 ),
-                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                           ],
@@ -661,7 +663,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       alignment: AlignmentDirectional(0.74, -1),
                       child: Container(
                         width: 120,
-                        height: 120,
+                        height: 135,
                         decoration: BoxDecoration(
                           color:
                               FlutterFlowTheme.of(context).secondaryBackground,
@@ -672,10 +674,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             Expanded(
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  setState(
-                                      () => FFAppState().FilterOption = 'All');
-                                  setState(
-                                      () => FFAppState().showFilter = false);
+                                  setState(() {
+                                    FFAppState().FilterOption = 'All';
+                                    FFAppState().showFilter = false;
+                                  });
                                 },
                                 text: 'All',
                                 options: FFButtonOptions(
@@ -689,28 +691,29 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         fontFamily: 'Poppins',
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                       ),
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
                                     width: 1,
                                   ),
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(1),
                                 ),
                               ),
                             ),
                             Expanded(
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  setState(() =>
-                                      FFAppState().FilterOption = 'Active');
-                                  setState(
-                                      () => FFAppState().showFilter = false);
+                                  setState(() {
+                                    FFAppState().FilterOption = 'Active';
+                                    FFAppState().showFilter = false;
+                                  });
                                 },
                                 text: 'Active',
                                 options: FFButtonOptions(
                                   width: 130,
-                                  height: 40,
+                                  height: 45,
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
                                   textStyle: FlutterFlowTheme.of(context)
@@ -719,27 +722,29 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         fontFamily: 'Poppins',
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
                                     width: 1,
                                   ),
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(1),
                                 ),
                               ),
                             ),
                             Expanded(
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  setState(() =>
-                                      FFAppState().FilterOption = 'Completed');
-                                  setState(
-                                      () => FFAppState().showFilter = false);
+                                  setState(() {
+                                    FFAppState().FilterOption = 'Completed';
+                                    FFAppState().showFilter = false;
+                                  });
                                 },
                                 text: 'Completed',
                                 options: FFButtonOptions(
                                   width: 130,
-                                  height: 40,
+                                  height: 45,
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
                                   textStyle: FlutterFlowTheme.of(context)
@@ -748,12 +753,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         fontFamily: 'Poppins',
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
                                     width: 1,
                                   ),
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(1),
                                 ),
                               ),
                             ),

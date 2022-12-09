@@ -6,6 +6,7 @@ import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class StatisticsWidget extends StatefulWidget {
   const StatisticsWidget({Key? key}) : super(key: key);
@@ -26,6 +27,8 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<List<TasksRecord>>(
       stream: queryTasksRecord(),
       builder: (context, snapshot) {
@@ -137,9 +140,9 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
             ),
           ),
           appBar: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).alternate,
-            iconTheme: IconThemeData(
-                color: FlutterFlowTheme.of(context).tertiaryColor),
+            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+            iconTheme:
+                IconThemeData(color: FlutterFlowTheme.of(context).primaryColor),
             automaticallyImplyLeading: true,
             leading: FlutterFlowIconButton(
               borderColor: Colors.transparent,

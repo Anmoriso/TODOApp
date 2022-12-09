@@ -4,6 +4,7 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class EditTaskWidget extends StatefulWidget {
   const EditTaskWidget({
@@ -39,6 +40,8 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<TasksRecord>(
       stream: TasksRecord.getDocument(widget.taskRef!),
       builder: (context, snapshot) {

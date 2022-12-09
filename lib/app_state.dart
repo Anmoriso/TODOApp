@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'flutter_flow/lat_lng.dart';
 
-class FFAppState {
+class FFAppState extends ChangeNotifier {
   static final FFAppState _instance = FFAppState._internal();
 
   factory FFAppState() {
@@ -18,11 +19,29 @@ class FFAppState {
 
   late SharedPreferences prefs;
 
-  bool showMenu = false;
+  bool _showMenu = false;
+  bool get showMenu => _showMenu;
+  set showMenu(bool _value) {
+    notifyListeners();
 
-  bool showFilter = false;
+    _showMenu = _value;
+  }
 
-  String FilterOption = 'All';
+  bool _showFilter = false;
+  bool get showFilter => _showFilter;
+  set showFilter(bool _value) {
+    notifyListeners();
+
+    _showFilter = _value;
+  }
+
+  String _FilterOption = 'All';
+  String get FilterOption => _FilterOption;
+  set FilterOption(String _value) {
+    notifyListeners();
+
+    _FilterOption = _value;
+  }
 }
 
 LatLng? _latLngFromString(String? val) {

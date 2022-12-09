@@ -2,6 +2,7 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class MoreOptionsWidget extends StatefulWidget {
   const MoreOptionsWidget({Key? key}) : super(key: key);
@@ -20,6 +21,8 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Material(
       color: Colors.transparent,
       elevation: 5,
